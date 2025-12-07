@@ -52,3 +52,4 @@ python3 desktop_app.py
 
 ## Documentação OpenAPI
 Ver arquivo: `openapi.yaml`
+Ou http://localhost:5000/docs utilizando swagger
