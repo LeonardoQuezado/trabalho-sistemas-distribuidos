@@ -1,0 +1,257 @@
+openapi: 3.1.0
+info:
+  title: Studio Ghibli Favorites API
+  description: API REST para gerenciar personagens do Studio Ghibli e sistema de favoritos
+  version: 1.0.0
+  contact:
+    name: Leonardo Quezado
+    email: seu-email@exemplo.com
+
+servers:
+  - url: http://localhost:5000
+    description: Servidor de desenvolvimento
+
+tags:
+  - name: People
+    description: Operações relacionadas a personagens
+  - name: Favorites
+    description: Sistema de favoritos
+
+paths:
+  /people:
+    get:
+      tags:
+        - People
+      summary: Lista todos os personagens
+      description: Retorna lista completa de personagens do Studio Ghibli
+      parameters:
+        - name: format
+          in: query
+          description: Formato de resposta (json, xml, protobuf)
+          required: false
+          schema:
+            type: string
+            enum: [json, xml, protobuf]
+            default: json
+      responses:
+        '200':
+          description: Lista de personagens retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /people/{id}:
+    get:
+      tags:
+        - People
+      summary: Busca personagem por ID
+      description: Retorna informações detalhadas de um personagem específico
+      parameters:
+        - name: id
+          in: path
+          description: ID do personagem
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          description: Formato de resposta (json, xml)
+          required: false
+          schema:
+            type: string
+            enum: [json, xml]
+            default: json
+      responses:
+        '200':
+          description: Personagem encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: Personagem não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /favorites:
+    get:
+      tags:
+        - Favorites
+      summary: Lista todos os favoritos
+      description: Retorna lista de personagens marcados como favoritos
+      parameters:
+        - name: format
+          in: query
+          description: Formato de resposta (json, xml)
+          required: false
+          schema:
+            type: string
+            enum: [json, xml]
+            default: json
+      responses:
+        '200':
+          description: Lista de favoritos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorite'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorite'
+
+    post:
+      tags:
+        - Favorites
+      summary: Adiciona personagem aos favoritos
+      description: Marca um personagem como favorito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - person_id
+              properties:
+                person_id:
+                  type: string
+                  description: ID do personagem
+      responses:
+        '201':
+          description: Personagem adicionado aos favoritos com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  favorite:
+                    $ref: '#/components/schemas/Favorite'
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Personagem não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Personagem já está nos favoritos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /favorites/{id}:
+    delete:
+      tags:
+        - Favorites
+      summary: Remove personagem dos favoritos
+      description: Remove um personagem da lista de favoritos
+      parameters:
+        - name: id
+          in: path
+          description: ID do personagem
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Personagem removido dos favoritos com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Personagem não encontrado nos favoritos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID único do personagem
+        name:
+          type: string
+          description: Nome do personagem
+        gender:
+          type: string
+          description: Gênero do personagem
+        age:
+          type: string
+          description: Idade do personagem
+        eye_color:
+          type: string
+          description: Cor dos olhos
+        hair_color:
+          type: string
+          description: Cor do cabelo
+        films:
+          type: array
+          items:
+            type: string
+          description: URLs dos filmes em que aparece
+        species:
+          type: string
+          description: URL da espécie
+        url:
+          type: string
+          description: URL do recurso
+
+    Favorite:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do personagem
+        name:
+          type: string
+          description: Nome do personagem
+        gender:
+          type: string
+          description: Gênero
+        age:
+          type: string
+          description: Idade
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensagem de erro

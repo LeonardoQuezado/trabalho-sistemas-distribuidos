@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px;">Todos os Personagens ({{ personagens|length }})</h2>
+
+<div class="grid">
+    {% for person in personagens %}
+    <div class="card">
+        <h3>{{ person.name }}</h3>
+        <p><strong>Gênero:</strong> {{ person.gender }}</p>
+        <p><strong>Idade:</strong> {{ person.age or 'Desconhecida' }}</p>
+        <p><strong>Cor dos olhos:</strong> {{ person.eye_color or 'N/A' }}</p>
+        <p><strong>Cor do cabelo:</strong> {{ person.hair_color or 'N/A' }}</p>
+        
+        <div style="margin-top: 15px;">
+            <a href="/person/{{ person.id }}" class="btn btn-primary">Ver Detalhes</a>
+            
+            <form action="/add_favorite/{{ person.id }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-primary">⭐ Favoritar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

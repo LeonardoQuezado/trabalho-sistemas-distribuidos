@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="/people" class="btn btn-primary">← Voltar</a>
+
+<div class="card" style="margin-top: 20px;">
+    <h2>{{ personagem.name }}</h2>
+    
+    <div style="margin-top: 20px;">
+        <p><strong>ID:</strong> {{ personagem.id }}</p>
+        <p><strong>Gênero:</strong> {{ personagem.gender }}</p>
+        <p><strong>Idade:</strong> {{ personagem.age or 'Desconhecida' }}</p>
+        <p><strong>Cor dos olhos:</strong> {{ personagem.eye_color or 'N/A' }}</p>
+        <p><strong>Cor do cabelo:</strong> {{ personagem.hair_color or 'N/A' }}</p>
+        
+        {% if personagem.films %}
+        <p><strong>Filmes:</strong> {{ personagem.films|length }} filme(s)</p>
+        {% endif %}
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <form action="/add_favorite/{{ personagem.id }}" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-primary">⭐ Adicionar aos Favoritos</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

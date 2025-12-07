@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px;">⭐ Meus Favoritos ({{ favoritos|length }})</h2>
+
+{% if favoritos|length == 0 %}
+<div class="card" style="text-align: center; padding: 50px;">
+    <p style="font-size: 18px; color: #666;">Você ainda não tem favoritos.</p>
+    <a href="/people" class="btn btn-primary" style="margin-top: 20px;">
+        Adicionar Favoritos
+    </a>
+</div>
+{% else %}
+<div class="grid">
+    {% for fav in favoritos %}
+    <div class="card">
+        <h3>{{ fav.name }}</h3>
+        <p><strong>Gênero:</strong> {{ fav.gender }}</p>
+        <p><strong>Idade:</strong> {{ fav.age or 'Desconhecida' }}</p>
+        
+        <div style="margin-top: 15px;">
+            <form action="/remove_favorite/{{ fav.id }}" method="POST">
+                <button type="submit" class="btn btn-danger">🗑️ Remover</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

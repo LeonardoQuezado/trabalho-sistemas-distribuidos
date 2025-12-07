@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px 0;">
+    <h2>Bem-vindo ao Sistema de Favoritos</h2>
+    <p style="margin: 20px 0; font-size: 18px; color: #666;">
+        Explore os personagens do Studio Ghibli e marque seus favoritos!
+    </p>
+    
+    <div style="margin-top: 40px;">
+        <a href="/people" class="btn btn-primary" style="font-size: 18px; padding: 15px 30px;">
+            Ver Todos os Personagens
+        </a>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <img src="https://upload.wikimedia.org/wikipedia/en/c/ca/Studio_Ghibli_logo.svg" 
+             alt="Studio Ghibli" 
+             style="max-width: 300px; opacity: 0.8;">
+    </div>
+</div>
+{% endblock %}
